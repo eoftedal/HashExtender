@@ -11,7 +11,6 @@ public class DigestExtender {
 		digester.reset();
 		byte[] newDigest = new byte[digester.getDigestSize()];
 		int numFields = digester.getDigestSize() / 4;
-		System.out.println(numFields);
 		for (int i = 0; i < numFields; i++) {
 			getField(digester.getClass(), "H" + (i + 1)).set(digester, pack(hash, i * 4, bigEndian));
 		}
