@@ -8,3 +8,8 @@ MD5(API_KEY + parameters)
 You need bouncycastle to use this
 Tested with bcprov-jdk16-146.jar
 
+For a thorough explanation see:
+http://rdist.root.org/2009/10/29/stop-using-unsafe-keyed-hashes-use-hmac/
+
+Oh, and don't use hash(secret + data). Use HMAC instead.
+
