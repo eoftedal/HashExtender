@@ -1,8 +1,10 @@
-Allows you to test hashextension
+Allows you to test hashextension (extending an existing hash).
 
+This is meant to prove that signatures on the form Hash(secret + data to sign) are vulnerable.
 
-
+Most notably this was a problem for Flickr a while back because they used
+MD5(API_KEY + parameters)
 
 You need bouncycastle to use this
-I used bcprov-jdk16-146.jar
+Tested with bcprov-jdk16-146.jar
 
