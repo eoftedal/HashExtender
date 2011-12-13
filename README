@@ -1,0 +1,8 @@
+Allows you to test hashextension
+
+
+
+
+You need bouncycastle to use this
+I used bcprov-jdk16-146.jar
+
