@@ -1,11 +1,21 @@
+
 import java.lang.reflect.Field;
 
 import org.bouncycastle.crypto.digests.GeneralDigest;
 import org.bouncycastle.crypto.digests.MD5Digest;
 
 public class DigestExtender {
+
+	public byte[] extend(GeneralDigest digester, byte[] hash, byte[] newData) throws Exception {
+		return extendInner(digester, hash, newData, 64);
+	}
+	public byte[] extend(GeneralDigest digester, byte[] hash, byte[] newData, int length) throws Exception{
+		length = length + (64 - length % 64);
+		return extendInner(digester, hash, newData, length);
+	}
+
 	
-	public byte[] extend(GeneralDigest digester, byte[] hash, byte[] newData)
+	private byte[] extendInner(GeneralDigest digester, byte[] hash, byte[] newData, int length)
 			throws Exception {
 		boolean bigEndian = isBigEndian(digester);
 		digester.reset();
@@ -14,8 +24,7 @@ public class DigestExtender {
 		for (int i = 0; i < numFields; i++) {
 			getField(digester.getClass(), "H" + (i + 1)).set(digester, pack(hash, i * 4, bigEndian));
 		}
-		getField(GeneralDigest.class, "byteCount").set(digester, 64);
-		//printParams(digester);
+		getField(GeneralDigest.class, "byteCount").set(digester, length);
 		digester.update(newData, 0, newData.length);
 		digester.doFinal(newDigest, 0);
 		return newDigest;
@@ -26,7 +35,7 @@ public class DigestExtender {
 	}
 
 	public byte[] getPad(GeneralDigest digester, int dataLengthInCurrentHash) {
-		byte[] pad = new byte[64 - dataLengthInCurrentHash];
+		byte[] pad = new byte[64 - dataLengthInCurrentHash % 64 ];
 		pad[0] = (byte) 0x80;
 		for (int i = 1; i < pad.length; i++) {
 			pad[i] = (byte) 0;
